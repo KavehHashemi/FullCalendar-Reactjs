@@ -13,8 +13,8 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import uuid from "react-uuid";
 import moment from "moment-jalaali";
-import "imrc-datetime-picker/dist/imrc-datetime-picker.css";
-import { DatetimePicker } from "imrc-datetime-picker";
+// import "imrc-datetime-picker/dist/imrc-datetime-picker.css";
+// import { DatetimePicker } from "imrc-datetime-picker";
 import Multiselect from "multiselect-react-dropdown";
 const axios = require("axios");
 
@@ -37,7 +37,7 @@ const ResourceView = () => {
     operations: [],
     calendarId: "",
     isMaintenance: false,
-    autoSchedule: true
+    autoSchedule: true,
   };
   const [event, setEvent] = useState(defaultState);
   const [eventDuration, setEventDuration] = useState({
@@ -46,11 +46,11 @@ const ResourceView = () => {
   });
   const [defaultGap, setDefaultGap] = useState();
 
-  const fetchConfig = ()=>{
-    axios.get("http://localhost:4000/c").then((response)=>{
-      setDefaultGap(response.data[0])
-    })
-  } 
+  const fetchConfig = () => {
+    axios.get("http://localhost:4000/c").then((response) => {
+      setDefaultGap(response.data[0]);
+    });
+  };
   console.log(defaultGap);
   let resourceName;
 
@@ -59,7 +59,7 @@ const ResourceView = () => {
     if (event.isMaintenance) {
       event.color = "#fa9696";
       event.borderColor = "#751010";
-      event.textColor = "#751010"
+      event.textColor = "#751010";
     } else {
       switch (event.resourceId) {
         case "1":
@@ -86,12 +86,11 @@ const ResourceView = () => {
           event.color = "#906C8D";
           event.borderColor = "#906C8D";
           event.textColor = "white";
-          break;  
+          break;
         default:
           break;
       }
     }
-    
   };
   const fetchEvents = () => {
     axios.get("http://localhost:4000/e").then((response) => {
@@ -191,9 +190,9 @@ const ResourceView = () => {
       d.isEdit = true;
       d.description = e.event.extendedProps.description;
       d.operations = e.event.extendedProps.operations;
-      d.calendarId= e.event.extendedProps.calendarId;
-      d.isMaintenance= e.event.extendedProps.isMaintenance;
-      d.autoSchedule= e.event.extendedProps.autoSchedule;
+      d.calendarId = e.event.extendedProps.calendarId;
+      d.isMaintenance = e.event.extendedProps.isMaintenance;
+      d.autoSchedule = e.event.extendedProps.autoSchedule;
       return d;
     });
     setEventDuration((prev) => {
@@ -225,12 +224,10 @@ const ResourceView = () => {
     // console.log(event.autoSchedule);
     axios
       .post("http://localhost:4000/create", event)
-      .then((response)=>{
+      .then((response) => {
         let calendarApi = calendarRef.current.getApi();
-        calendarApi.getEventById(event.id).setProp("id",response.data);
+        calendarApi.getEventById(event.id).setProp("id", response.data);
         rearrangeDates(defaultGap, event.resourceId);
-       
-        
       })
       .catch((error) => console.log(error));
 
@@ -277,8 +274,7 @@ const ResourceView = () => {
     let eventsArray = res.getEvents();
     eventsArray.sort((a, b) => {
       return a.start - b.start;
-    });    
-    
+    });
 
     for (let i = 0; i < eventsArray.length; i++) {
       if (i === 0) {
@@ -295,9 +291,9 @@ const ResourceView = () => {
           isEdit: false,
           description: a.extendedProps.description,
           operations: a.extendedProps.operations,
-          calendarId:a.extendedProps.calendarId,
+          calendarId: a.extendedProps.calendarId,
           isMaintenance: a.extendedProps.isMaintenance,
-          autoSchedule: a.extendedProps.autoSchedule
+          autoSchedule: a.extendedProps.autoSchedule,
         };
         axios
           .put("http://localhost:4000/edit/", tempA)
@@ -308,13 +304,13 @@ const ResourceView = () => {
       } else {
         let p = calendarApi.getEventById(eventsArray[i - 1].id);
         let q = calendarApi.getEventById(eventsArray[i].id);
-        let x
-        if(p.extendedProps.isMaintenance || q.extendedProps.isMaintenance){
+        let x;
+        if (p.extendedProps.isMaintenance || q.extendedProps.isMaintenance) {
           x = moment(p.end)._d;
-        }else{
-           x = moment(p.end).add(defaultGap, "h")._d;
+        } else {
+          x = moment(p.end).add(defaultGap, "h")._d;
         }
-        if (q.extendedProps.autoSchedule) {   
+        if (q.extendedProps.autoSchedule) {
           if (x !== q.start) {
             q.setStart(x, { maintainDuration: true });
           }
@@ -332,10 +328,9 @@ const ResourceView = () => {
           isEdit: false,
           description: q.extendedProps.description,
           operations: q.extendedProps.operations,
-          calendarId:q.extendedProps.calendarId,
-          isMaintenance:q.extendedProps.isMaintenance,
-          autoSchedule: q.extendedProps.autoSchedule
-
+          calendarId: q.extendedProps.calendarId,
+          isMaintenance: q.extendedProps.isMaintenance,
+          autoSchedule: q.extendedProps.autoSchedule,
         };
         // console.log(tempQ);
         axios
@@ -382,10 +377,9 @@ const ResourceView = () => {
           padding: "1%",
           zIndex: "0",
           fontFamily: "Sahel, Segoe UI",
-          height:"100vh",
+          height: "100vh",
         }}
         className="BG"
-        
       >
         <FullCalendar
           plugins={plugins}
@@ -462,7 +456,7 @@ const ResourceView = () => {
               backgroundColor: "#efefef",
             }}
           >
-            <DatetimePicker
+            {/* <DatetimePicker
               style={{
                 margin: "auto",
                 backgroundColor: "#efefef",
@@ -488,7 +482,7 @@ const ResourceView = () => {
                 "بهمن",
                 "اسفند",
               ]}
-            />
+            /> */}
           </Modal.Body>
           <Modal.Footer style={{ backgroundColor: "#efefef" }}>
             <Button
@@ -586,7 +580,7 @@ const ResourceView = () => {
                       style={{
                         width: "40%",
                         marginLeft: "10px",
-                        marginBottom: "10px"
+                        marginBottom: "10px",
                       }}
                       type="number"
                       min="1"
@@ -662,17 +656,28 @@ const ResourceView = () => {
                 </div>
                 <label>تعمیرات</label>
                 <div>
-                <Form.Check type="checkbox" checked={event.isMaintenance}  onChange={(e) => {
-                      setEvent({ ...event, isMaintenance: !event.isMaintenance });
+                  <Form.Check
+                    type="checkbox"
+                    checked={event.isMaintenance}
+                    onChange={(e) => {
+                      setEvent({
+                        ...event,
+                        isMaintenance: !event.isMaintenance,
+                      });
                       console.log(event.isMaintenance);
-                    }}/>                  
+                    }}
+                  />
                 </div>
                 <label>چینش خودکار</label>
                 <div>
-                <Form.Check type="checkbox" checked={event.autoSchedule}  onChange={(e) => {
+                  <Form.Check
+                    type="checkbox"
+                    checked={event.autoSchedule}
+                    onChange={(e) => {
                       setEvent({ ...event, autoSchedule: !event.autoSchedule });
                       console.log(event.autoSchedule);
-                    }}/>                  
+                    }}
+                  />
                 </div>
               </div>
             </Form>
