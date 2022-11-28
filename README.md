@@ -1,6 +1,7 @@
 ## About
 
 A Reactjs implementation of FullCalendar event calendar using node.js and axios.
+
 The data for resources and events are still static.
 
 ## Starting Up

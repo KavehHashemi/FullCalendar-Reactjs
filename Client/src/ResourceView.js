@@ -5,7 +5,6 @@ import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
 import interactionPlugin from "@fullcalendar/interaction";
 import { useState, useRef, useEffect } from "react";
 import * as data from "./Data/data.json";
-import "moment/locale/fa";
 import { Modal, Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
@@ -13,8 +12,11 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import uuid from "react-uuid";
 import moment from "moment-jalaali";
-// import "imrc-datetime-picker/dist/imrc-datetime-picker.css";
-// import { DatetimePicker } from "imrc-datetime-picker";
+import "moment/locale/fa";
+import TextField from "@mui/material/TextField";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import AdapterJalali from "@date-io/jalaali";
 import Multiselect from "multiselect-react-dropdown";
 const axios = require("axios");
 
@@ -93,6 +95,8 @@ const ResourceView = () => {
     }
   };
   const fetchEvents = () => {
+    let localEvents = JSON.parse(localStorage.getItem("events"));
+
     axios.get("http://localhost:4000/e").then((response) => {
       const res = response.data;
       res.map((e) => {
@@ -483,6 +487,14 @@ const ResourceView = () => {
                 "اسفند",
               ]}
             /> */}
+            <LocalizationProvider dateAdapter={AdapterJalali}>
+              <DatePicker
+                mask="____/__/__"
+                value={date}
+                onChange={(e) => setDate(e)}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
           </Modal.Body>
           <Modal.Footer style={{ backgroundColor: "#efefef" }}>
             <Button
